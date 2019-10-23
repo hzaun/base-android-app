@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import com.nuzharukiya.baseapplication.presenters.BasePresenter
 import com.nuzharukiya.baseapplication.views.BaseView
+import okhttp3.logging.HttpLoggingInterceptor
 
 class BaseActivity : AppCompatActivity(), BaseView {
 
-    private lateinit var mPresenter: BasePresenter
     private lateinit var mContext: Context
+    private lateinit var mPresenter: BasePresenter
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
