@@ -1,9 +1,11 @@
 package com.nuzharukiya.baseapplication
 
 import android.app.Application
-import com.bumptech.glide.Glide
+import android.content.Context
+import com.bumptech.glide.module.AppGlideModule
 import com.nuzharukiya.baseapplication.connector.OkHttpClientInstance
 import com.nuzharukiya.baseapplication.connector.RetrofitClientInstance
+import com.nuzharukiya.baseapplication.utils.HzGlideModule
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
@@ -13,14 +15,23 @@ import retrofit2.Retrofit
 
 class BaseApplication : Application() {
 
-    private var retrofitInstance: Retrofit? = null
-    private var okHttpClientInstance: OkHttpClient? = null
-    private var glide: Glide? = null
+    lateinit var mContext: Context
+
+    var retrofitInstance: Retrofit? = null
+        private set
+    var okHttpClientInstance: OkHttpClient? = null
+        private set
+    var appGlideModule: AppGlideModule? = null
+        private set
 
     override fun onCreate() {
         super.onCreate()
 
+        mContext = this
+
         retrofitInstance = RetrofitClientInstance.instance
-        okHttpClientInstance = OkHttpClientInstance.instance
+        okHttpClientInstance = OkHttpClientInstance.getInstance(mContext)
+
+        appGlideModule = okHttpClientInstance?.let { HzGlideModule(it) }
     }
 }
