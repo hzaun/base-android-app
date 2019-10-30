@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
@@ -35,7 +37,9 @@ dependencies {
 
     // Dagger
     api 'com.google.dagger:dagger:2.25'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.25'
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     // OkHttp
     implementation "com.squareup.okhttp3:okhttp:$ok_http_version"

@@ -1,13 +1,12 @@
 package com.nuzharukiya.baseapplication
 
 import android.app.Application
-import android.content.Context
 import com.bumptech.glide.module.AppGlideModule
-import com.nuzharukiya.baseapplication.connector.OkHttpClientInstance
-import com.nuzharukiya.baseapplication.connector.RetrofitClientInstance
-import com.nuzharukiya.baseapplication.utils.HzGlideModule
-import okhttp3.OkHttpClient
+import com.nuzharukiya.baseapplication.dagger.ApplicationComponent
+import com.nuzharukiya.baseapplication.dagger.ContextModule
+import com.nuzharukiya.baseapplication.dagger.DaggerApplicationComponent
 import retrofit2.Retrofit
+import timber.log.Timber
 
 /**
  * Created by Nuzha Rukiya on 19/10/23.
@@ -15,11 +14,7 @@ import retrofit2.Retrofit
 
 class BaseApplication : Application() {
 
-    lateinit var mContext: Context
-
     var retrofitInstance: Retrofit? = null
-        private set
-    var okHttpClientInstance: OkHttpClient? = null
         private set
     var appGlideModule: AppGlideModule? = null
         private set
@@ -27,11 +22,13 @@ class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        mContext = this
+        Timber.plant(Timber.DebugTree())
 
-        retrofitInstance = RetrofitClientInstance.instance
-        okHttpClientInstance = OkHttpClientInstance.getInstance(mContext)
+        val applicationComponent: ApplicationComponent = DaggerApplicationComponent.builder()
+            .contextModule(ContextModule(applicationContext))
+            .build()
 
-        appGlideModule = okHttpClientInstance?.let { HzGlideModule(it) }
+        retrofitInstance = applicationComponent.getRetrofitInstance()
+        appGlideModule = applicationComponent.getAppGlideModule()
     }
 }
