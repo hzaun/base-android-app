@@ -18,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitModule {
 
     @Provides
+    @ApplicationScope
     fun getRetrofitClientInstance(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl(URLS.BASE)
@@ -29,6 +30,7 @@ class RetrofitModule {
     }
 
     @Provides
+    @ApplicationScope
     fun getGson(): Gson {
         return GsonBuilder()
             .setLenient()

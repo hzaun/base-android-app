@@ -20,17 +20,20 @@ import java.io.InputStream
 class AppGlideModule {
 
     @Provides
+    @ApplicationScope
     fun getAppGlideModule(urlLoaderFactory: OkHttpUrlLoader.Factory): HzAppGlideModule {
         return HzGlideModule(urlLoaderFactory)
     }
 
     @Provides
+    @ApplicationScope
     fun getOkHttpUrlLoaderFactory(client: OkHttpClient): OkHttpUrlLoader.Factory {
         return OkHttpUrlLoader.Factory(client)
     }
 }
 
 @GlideModule
+@ApplicationScope
 class HzGlideModule(private val urlLoaderFactory: OkHttpUrlLoader.Factory) : HzAppGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         glide.registry.replace(GlideUrl::class.java, InputStream::class.java, urlLoaderFactory)
@@ -38,4 +41,5 @@ class HzGlideModule(private val urlLoaderFactory: OkHttpUrlLoader.Factory) : HzA
 }
 
 @GlideModule
+@ApplicationScope
 open class HzAppGlideModule : AppGlideModule()

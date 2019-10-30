@@ -17,6 +17,7 @@ import java.io.File
 class NetworkModule {
 
     @Provides
+    @ApplicationScope
     fun getOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         cache: Cache
@@ -28,20 +29,25 @@ class NetworkModule {
     }
 
     @Provides
+    @ApplicationScope
     fun getHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
+        val hli = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
                 Timber.i(message)
             }
         })
+        hli.level = HttpLoggingInterceptor.Level.BASIC
+        return hli
     }
 
     @Provides
+    @ApplicationScope
     fun getCache(cacheFile: File): Cache {
         return Cache(cacheFile, 10 * 10 * 1000)
     }
 
     @Provides
+    @ApplicationScope
     fun getFile(mContext: Context): File {
         val cacheFile = File(mContext.cacheDir, "okhttp_cache")
         cacheFile.mkdirs()
